@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  database:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=challengeDB
+    volumes:
+      - pgdata:/data/postgres
+  stock-service:
+    build:
+      context: ./stock-service
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    volumes:
+      - ./:/src
+    mem_limit: 128m
+    mem_reservation: 128m
+  api-service:
+    container_name: challenge-cache
+    build:
+      context: ./api-service
+      dockerfile: Dockerfile
+    depends_on:
+      - stock-service
+    environment:
+      - SECRET_KEY=535bc802bbcf79e2fd375340c896c099c56725e9
+      - DATABASE_URL=postgresql://postgres:docker@localhost:5432/challengeDB?schema=public
+      - STOCK_SERVICE_API=http://localhost:3001
+    volumes:
+      - ./:/src
+    mem_limit: 128m
+    mem_reservation: 128m
+volumes:
+  pgdata:
+    driver: local
