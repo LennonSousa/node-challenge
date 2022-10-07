@@ -22,6 +22,7 @@
 - Test: Jest
 - Database: PostgreSql
 - Design Principles: SOLID
+- Load tests: Artillery Cloud-scale performance testing
 
 ## Installation and run
 
@@ -88,10 +89,17 @@ $ yarn start:dev
 $ localhost:3001
 ```
 
+## Load tests
+
+```
+$ npm install -g artillery@latest
+
+$ artillery run load-tests/main.yml
+```
+
 ## Collections
 
 Insomnia collection
-cd collections
 
 ```
 cd collections

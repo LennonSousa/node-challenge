@@ -1,0 +1,41 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 50
+      name: Ramp up load
+
+scenarios:
+  - name: "Authenticate and quote"
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            username: "first@user.com"
+            password: "88a04f6ec43b1dd118f84a436591c13b4b0a6e26"
+          capture:
+            - json: "$.accessToken"
+              as: "accessToken"
+      # - log: "Access token: {{ accessToken }}"
+      - get:
+          url: "/stock?q=TSLA.US"
+          headers:
+            Authorization: "Bearer {{accessToken}}"
+  - name: "Authenticate and get stats"
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            username: "first@user.com"
+            password: "88a04f6ec43b1dd118f84a436591c13b4b0a6e26"
+          capture:
+            - json: "$.accessToken"
+              as: "accessToken"
+      - get:
+          url: "/stats"
+          headers:
+            Authorization: "Bearer {{accessToken}}"
