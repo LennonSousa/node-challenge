@@ -6,8 +6,10 @@ COPY package*.json ./
 
 RUN npm install
 
+EXPOSE 3001
+
 COPY . .
 
 RUN npm run build
 
-CMD ["node", "./dist/src/app"]
+CMD ["node", "dist/main"]

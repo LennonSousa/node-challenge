@@ -5,37 +5,52 @@ services:
     restart: always
     ports:
       - 5432:5432
+    networks:
+      - node-challenge-network
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=docker
       - POSTGRES_DB=challengeDB
     volumes:
       - pgdata:/data/postgres
-  stock-service:
+  stock_service:
     build:
       context: ./stock-service
       dockerfile: Dockerfile
     depends_on:
       - database
+    ports:
+      - 3001:3001
+    networks:
+      - node-challenge-network
     volumes:
       - ./:/src
     mem_limit: 128m
     mem_reservation: 128m
-  api-service:
-    container_name: challenge-cache
+  api_service:
     build:
       context: ./api-service
       dockerfile: Dockerfile
+    links:
+      - database
     depends_on:
-      - stock-service
+      - database
+      - stock_service
+    ports:
+      - 3000:3000
+    networks:
+      - node-challenge-network
     environment:
       - SECRET_KEY=535bc802bbcf79e2fd375340c896c099c56725e9
-      - DATABASE_URL=postgresql://postgres:docker@localhost:5432/challengeDB?schema=public
-      - STOCK_SERVICE_API=http://localhost:3001
+      - DATABASE_URL=postgresql://postgres:docker@database:5432/challengeDB?schema=public
+      - STOCK_SERVICE_API=http://stock_service:3001
     volumes:
       - ./:/src
     mem_limit: 128m
     mem_reservation: 128m
+networks:
+  node-challenge-network:
+    driver: bridge
 volumes:
   pgdata:
     driver: local

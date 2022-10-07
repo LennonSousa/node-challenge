@@ -1,5 +1,5 @@
 import { MailAdapter, SendMailData } from '../mailAdapter';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 
 export class NodemailerAdapter implements MailAdapter {
   async sendMail({ to, subject, body }: SendMailData) {
