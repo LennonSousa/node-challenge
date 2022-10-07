@@ -24,6 +24,23 @@
 - Design Principles: SOLID
 - Load tests: Artillery Cloud-scale performance testing
 
+## Env api-service
+
+`SECRET_KEY=to_jwt_token`
+
+`DATABASE_URL={"postgresql://postgres:docker@localhost:5432/challengeDB?schema=public"}`
+
+`STOCK_SERVICE_API=http://localhost:3001`
+
+`EMAIL_HOST=smtp.mailtrap.io`
+`EMAIL_PORT=2525`
+`EMAIL_USER=your_email_trap_user`
+`EMAIL_PASS=your_email_trap_password`
+
+### To e-mail, you can use a service like Mail trap
+
+- [Mailtrap Email Sandbox Service](https://mailtrap.io/)
+
 ## Installation and run
 
 ```bash
